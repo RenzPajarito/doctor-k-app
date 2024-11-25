@@ -9,6 +9,7 @@ import {
   SafeAreaView,
   Image,
   Modal,
+  RefreshControl,
 } from "react-native";
 import { db, auth } from "../firebase.config"; // Ensure you've exported Firestore and Auth
 import {
@@ -87,6 +88,9 @@ export default function MenuScreen() {
     isRequired: false,
     maxSelections: 1,
   });
+
+  // Add new state for refreshing
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   // Fetch categories from Firestore when the component mounts
   useEffect(() => {
@@ -450,12 +454,48 @@ export default function MenuScreen() {
     }));
   };
 
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    try {
+      const [categoriesSnapshot, menuItemsSnapshot] = await Promise.all([
+        getDocs(collection(db, "categories")),
+        getDocs(collection(db, "menuItems")),
+      ]);
+
+      const categoriesData = categoriesSnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      })) as Category[];
+
+      const menuItemsData = menuItemsSnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      })) as MenuItem[];
+
+      setCategories(categoriesData);
+      setMenuItems(menuItemsData);
+    } catch (err) {
+      setError("Failed to refresh data");
+      console.error(err);
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollViewContent}
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={isRefreshing}
+            onRefresh={handleRefresh}
+            colors={['#FF8C00']} // Android
+            tintColor="#FF8C00" // iOS
+          />
+        }
       >
         <View style={styles.container}>
           {error && <Text style={styles.errorText}>{error}</Text>}

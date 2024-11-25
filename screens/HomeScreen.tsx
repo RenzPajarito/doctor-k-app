@@ -4,6 +4,7 @@ import MenuScreen from "./MenuScreen";
 import AccountScreen from "./AccountScreen";
 import { OrdersScreen } from "./OrdersScreen";
 import OverviewScreen from "./OverviewScreen";
+import OrderPage from "./OrderPage";
 
 const Tab = createBottomTabNavigator();
 
@@ -22,6 +23,10 @@ export function HomeScreen() {
             iconName = focused ? "restaurant" : "restaurant-outline";
           } else if (route.name === "Account") {
             iconName = focused ? "person" : "person-outline";
+          } else if (route.name === "Order Now") {
+            iconName = focused ? "cart" : "cart-outline";
+          } else if (route.name === "New Tab") {
+            iconName = focused ? "add" : "add-outline";
           }
 
           return <Ionicons name={iconName as any} size={size} color={color} />;
@@ -34,6 +39,8 @@ export function HomeScreen() {
       })}
     >
       <Tab.Screen name="Overview" component={OverviewScreen} />
+      <Tab.Screen name="Order Now" component={OrderPage} />
+      {/* <Tab.Screen name="Order Now" component={OrderingScreen} /> */}
       <Tab.Screen name="Orders" component={OrdersScreen} />
       <Tab.Screen name="Menu" component={MenuScreen} />
       <Tab.Screen name="Account" component={AccountScreen} />
