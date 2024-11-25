@@ -97,6 +97,12 @@ export default function AccountScreen() {
             subtitle="Password"
             onPress={() => navigation.navigate("Security")}
           />
+          <SettingsItem
+            icon="qr-code-outline"
+            title="QR Code"
+            subtitle="Generate QR code"
+            onPress={() => navigation.navigate("QRCode")}
+          />
         </View>
 
         <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>

@@ -19,6 +19,7 @@ import { HomeScreen } from "./screens/HomeScreen";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { GCashInfoScreen } from "./screens/GCashInfoScreen";
 import SecurityScreen from "./screens/SecurityScreen";
+import { QRCodeScreen } from "./screens/QRCodeScreen";
 
 interface LoginFormData {
   email: string;
@@ -31,6 +32,7 @@ type RootStackParamList = {
   Home: undefined;
   GCashInfo: undefined;
   Security: undefined;
+  QRCode: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -189,6 +191,14 @@ export default function App() {
             component={SecurityScreen}
             options={{
               title: "Security",
+              headerBackTitle: "Back",
+            }}
+          />
+          <Stack.Screen
+            name="QRCode"
+            component={QRCodeScreen}
+            options={{
+              title: "QR Code",
               headerBackTitle: "Back",
             }}
           />
