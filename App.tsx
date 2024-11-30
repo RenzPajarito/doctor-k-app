@@ -66,11 +66,11 @@ function LoginScreen({ navigation }: any) {
       console.log("Login successful");
       navigation.replace("Home"); // Replace login screen with home screen
     } catch (error: any) {
-      setError(
-        error.code === "auth/invalid-credential"
-          ? "Invalid email or password"
-          : "An error occurred during login"
-      );
+      const errorMessages: Record<string, string> = {
+        "auth/invalid-credential": "Invalid email or password",
+        "default": "An error occurred during login",
+      };
+      setError(errorMessages[error.code] || errorMessages["default"]);
     } finally {
       setIsLoading(false);
     }

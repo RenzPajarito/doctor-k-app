@@ -32,13 +32,13 @@ export default function OverviewScreen() {
     const unsubscribe = onSnapshot(
       ordersQuery,
       (snapshot) => {
-        const uniqueDeviceIds = new Set();
+        const uniqueDeviceIds = new Map();
         let revenue = 0;
 
         snapshot.forEach((doc) => {
           const order = doc.data();
           revenue += order.total || 0;
-          if (order.deviceId) uniqueDeviceIds.add(order.deviceId);
+          if (order.deviceId) uniqueDeviceIds.set(order.deviceId, true);
         });
 
         setMetrics({

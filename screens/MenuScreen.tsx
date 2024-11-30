@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   View,
   Text,
@@ -482,6 +482,10 @@ export default function MenuScreen() {
     }
   };
 
+  // Memoize categories and menu items for optimization
+  const memoizedCategories = useMemo(() => categories, [categories]);
+  const memoizedMenuItems = useMemo(() => menuItems, [menuItems]);
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView
@@ -516,7 +520,7 @@ export default function MenuScreen() {
 
           <Text style={styles.subtitle}>Categories:</Text>
           <View style={styles.categoriesContainer}>
-            {categories.map((category) => (
+            {memoizedCategories.map((category) => ( // Use memoized categories
               <TouchableOpacity
                 key={category.id}
                 style={[
@@ -551,7 +555,7 @@ export default function MenuScreen() {
               <View style={styles.categoryHeader}>
                 <Text style={styles.categoryTitle}>
                   {
-                    categories.find((cat) => cat.id === menuItemForm.categoryId)
+                    memoizedCategories.find((cat) => cat.id === menuItemForm.categoryId)
                       ?.name
                   }
                 </Text>
@@ -569,7 +573,7 @@ export default function MenuScreen() {
                 </TouchableOpacity>
               </View>
 
-              {menuItems
+              {memoizedMenuItems // Use memoized menu items
                 .filter((item) => item.category === menuItemForm.categoryId)
                 .map((item) => (
                   <View key={item.id} style={styles.menuItem}>

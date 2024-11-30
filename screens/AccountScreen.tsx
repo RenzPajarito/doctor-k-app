@@ -55,6 +55,27 @@ export default function AccountScreen() {
   const navigation = useNavigation<NavigationProp>();
   const userEmail = auth.currentUser?.email;
 
+  const settingsItems = [
+    {
+      icon: "wallet-outline",
+      title: "GCash Information",
+      subtitle: "Manage your GCash account",
+      navigateTo: "GCashInfo",
+    },
+    {
+      icon: "lock-closed-outline",
+      title: "Security",
+      subtitle: "Password",
+      navigateTo: "Security",
+    },
+    {
+      icon: "qr-code-outline",
+      title: "QR Code",
+      subtitle: "Generate QR code",
+      navigateTo: "QRCode",
+    },
+  ];
+
   async function handleLogout() {
     try {
       await signOut(auth);
@@ -85,24 +106,15 @@ export default function AccountScreen() {
 
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Account Settings</Text>
-          <SettingsItem
-            icon="wallet-outline"
-            title="GCash Information"
-            subtitle="Manage your GCash account"
-            onPress={() => navigation.navigate("GCashInfo")}
-          />
-          <SettingsItem
-            icon="lock-closed-outline"
-            title="Security"
-            subtitle="Password"
-            onPress={() => navigation.navigate("Security")}
-          />
-          <SettingsItem
-            icon="qr-code-outline"
-            title="QR Code"
-            subtitle="Generate QR code"
-            onPress={() => navigation.navigate("QRCode")}
-          />
+          {settingsItems.map(({ icon, title, subtitle, navigateTo }) => (
+            <SettingsItem
+              key={title}
+              icon={icon}
+              title={title}
+              subtitle={subtitle}
+              onPress={() => navigation.navigate(navigateTo)}
+            />
+          ))}
         </View>
 
         <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>

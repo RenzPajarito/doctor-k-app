@@ -40,7 +40,6 @@ export function HomeScreen() {
     >
       <Tab.Screen name="Overview" component={OverviewScreen} />
       <Tab.Screen name="Order Now" component={OrderPage} />
-      {/* <Tab.Screen name="Order Now" component={OrderingScreen} /> */}
       <Tab.Screen name="Orders" component={OrdersScreen} />
       <Tab.Screen name="Menu" component={MenuScreen} />
       <Tab.Screen name="Account" component={AccountScreen} />

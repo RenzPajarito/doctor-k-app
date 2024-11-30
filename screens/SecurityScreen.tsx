@@ -20,13 +20,17 @@ import { Ionicons } from "@expo/vector-icons";
 
 export default function SecurityScreen() {
   const navigation = useNavigation();
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwords, setPasswords] = useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
   const [isLoading, setIsLoading] = useState(false);
 
   async function handlePasswordChange() {
     if (!auth.currentUser?.email) return;
+
+    const { newPassword, confirmPassword, currentPassword } = passwords;
 
     if (newPassword !== confirmPassword) {
       Alert.alert("Error", "New passwords don't match");
@@ -51,9 +55,7 @@ export default function SecurityScreen() {
       await updatePassword(auth.currentUser, newPassword);
 
       Alert.alert("Success", "Password updated successfully");
-      setCurrentPassword("");
-      setNewPassword("");
-      setConfirmPassword("");
+      setPasswords({ currentPassword: "", newPassword: "", confirmPassword: "" });
     } catch (error: any) {
       Alert.alert(
         "Error",
@@ -86,8 +88,8 @@ export default function SecurityScreen() {
             <TextInput
               style={styles.input}
               secureTextEntry
-              value={currentPassword}
-              onChangeText={setCurrentPassword}
+              value={passwords.currentPassword}
+              onChangeText={(text) => setPasswords({ ...passwords, currentPassword: text })}
               placeholder="Enter current password"
               autoCapitalize="none"
             />
@@ -98,8 +100,8 @@ export default function SecurityScreen() {
             <TextInput
               style={styles.input}
               secureTextEntry
-              value={newPassword}
-              onChangeText={setNewPassword}
+              value={passwords.newPassword}
+              onChangeText={(text) => setPasswords({ ...passwords, newPassword: text })}
               placeholder="Enter new password"
               autoCapitalize="none"
             />
@@ -110,8 +112,8 @@ export default function SecurityScreen() {
             <TextInput
               style={styles.input}
               secureTextEntry
-              value={confirmPassword}
-              onChangeText={setConfirmPassword}
+              value={passwords.confirmPassword}
+              onChangeText={(text) => setPasswords({ ...passwords, confirmPassword: text })}
               placeholder="Confirm new password"
               autoCapitalize="none"
             />

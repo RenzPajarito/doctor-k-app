@@ -88,6 +88,28 @@ export function GCashInfoScreen() {
     }
   }
 
+  const fieldMap: Record<string, { 
+    label: string; 
+    placeholder: string; 
+    value: string; 
+    onChange: React.Dispatch<React.SetStateAction<string>>; 
+    hint?: string;
+  }> = {
+    fullName: {
+      label: "Full Name",
+      placeholder: "Enter your full name",
+      value: fullName,
+      onChange: setFullName,
+    },
+    phoneNumber: {
+      label: "GCash Number",
+      placeholder: "Enter your GCash number",
+      value: phoneNumber,
+      onChange: setPhoneNumber,
+      hint: "Format: 09123456789",
+    },
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -101,29 +123,20 @@ export function GCashInfoScreen() {
       </View>
 
       <View style={styles.content}>
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Full Name</Text>
-          <TextInput
-            style={styles.input}
-            value={fullName}
-            onChangeText={setFullName}
-            placeholder="Enter your full name"
-            autoCapitalize="words"
-          />
-        </View>
-
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>GCash Number</Text>
-          <TextInput
-            style={styles.input}
-            value={phoneNumber}
-            onChangeText={setPhoneNumber}
-            placeholder="Enter your GCash number"
-            keyboardType="phone-pad"
-            maxLength={11}
-          />
-          <Text style={styles.hint}>Format: 09123456789</Text>
-        </View>
+        {Object.entries(fieldMap).map(([key, { label, placeholder, value, onChange, hint }]) => (
+          <View style={styles.inputContainer} key={key}>
+            <Text style={styles.label}>{label}</Text>
+            <TextInput
+              style={styles.input}
+              value={value}
+              onChangeText={onChange}
+              placeholder={placeholder}
+              keyboardType={key === 'phoneNumber' ? "phone-pad" : "default"}
+              maxLength={key === 'phoneNumber' ? 11 : undefined}
+            />
+            {hint && <Text style={styles.hint}>{hint}</Text>}
+          </View>
+        ))}
 
         <TouchableOpacity
           style={[styles.saveButton, isLoading && styles.saveButtonDisabled]}

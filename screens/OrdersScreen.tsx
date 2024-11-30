@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import {
   StyleSheet,
   Text,
@@ -39,6 +39,7 @@ interface Order {
   paymentProof: string;
   tableNumber: number;
   createdAt: number;
+  orderNumber: string;
 }
 
 // Add these helper functions before the main component
@@ -130,7 +131,7 @@ function OrderDetailsModal({
           ]}
         >
           <Text style={styles.modalHeader}>Order Details</Text>
-          <Text style={styles.orderId}>Order ID: {order.id}</Text>
+          <Text style={styles.orderId}>Order ID: {order.orderNumber}</Text>
           <Text
             style={[styles.orderInfo, { color: getStatusColor(order.status) }]}
           >
@@ -282,15 +283,21 @@ export function OrdersScreen() {
     }
   };
 
-  // Add this function to filter orders
-  const filteredOrders = orders.filter((order) =>
-    activeFilter === "all" ? true : order.status === activeFilter
-  );
+  // Add useMemo for filtered orders
+  const filteredOrders = useMemo(() => 
+    orders.filter((order) =>
+      activeFilter === "all" ? true : order.status === activeFilter
+    ), [orders, activeFilter]);
+
+  // Add useMemo for selected options in OrderDetailsModal
+  const selectedOptions = useMemo(() => 
+    selectedOrder?.items.flatMap(item => item.selectedOptions || []), [selectedOrder]);
 
   // Render Order item
-  const renderOrderItem = ({ item }: { item: Order }) => (
+  const renderOrderItem = useMemo(() => ({ item }: { item: Order }) => (
     <View style={styles.orderItem}>
-      <Text style={styles.orderId}>Order ID: {item.id}</Text>
+      <Text style={styles.orderId}>Order ID: {item.orderNumber}</Text>
+      <Text>Table No. {item.tableNumber}</Text>
       <Text style={{ color: getStatusColor(item.status) }}>
         Status: {item.status}
       </Text>
@@ -318,7 +325,7 @@ export function OrdersScreen() {
         </TouchableOpacity>
       </View>
     </View>
-  );
+  ), [handleStatusUpdate]);
 
   if (isLoading) {
     return (
